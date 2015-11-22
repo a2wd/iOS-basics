@@ -40,6 +40,42 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imageTap.minimumPressDuration = 0
         imageTap.addTarget(self, action: "imageToggle:")
         imageView.addGestureRecognizer(imageTap)
+        
+//        //Add filtericon to filterbuttons
+//        let filterIcon = RGBAImage(image: UIImage(named:"filtericon")!)
+//        let darkIcon = filterPresets["darkBW"]!(filterIcon!).toUIImage()
+//        let lightIcon = filterPresets["lightBW"]!(filterIcon!).toUIImage()
+//        let blueIcon = filterPresets["onlyBlue"]!(filterIcon!).toUIImage()
+//        let warmIcon = filterPresets["warmer"]!(filterIcon!).toUIImage()
+//        let coldIcon = filterPresets["colder"]!(filterIcon!).toUIImage()
+//        
+//        darkButton.setImage(darkIcon, forState: .Normal)
+//        darkButton.setImage(darkIcon, forState: .Selected)
+//        lightButton.setImage(lightIcon, forState: .Normal)
+//        lightButton.setImage(lightIcon, forState: .Selected)
+//        blueButton.setImage(blueIcon, forState: .Normal)
+//        blueButton.setImage(blueIcon, forState: .Selected)
+//        warmButton.setImage(warmIcon, forState: .Normal)
+//        warmButton.setImage(warmIcon, forState: .Selected)
+//        coldButton.setImage(coldIcon, forState: .Normal)
+//        coldButton.setImage(coldIcon, forState: .Selected)
+//        
+//        darkButton.contentHorizontalAlignment = .Fill
+//        darkButton.contentVerticalAlignment = .Fill
+//        lightButton.contentHorizontalAlignment = .Fill
+//        lightButton.contentVerticalAlignment = .Fill
+//        blueButton.contentHorizontalAlignment = .Fill
+//        blueButton.contentVerticalAlignment = .Fill
+//        warmButton.contentHorizontalAlignment = .Fill
+//        warmButton.contentVerticalAlignment = .Fill
+//        coldButton.contentHorizontalAlignment = .Fill
+//        coldButton.contentVerticalAlignment = .Fill
+//        
+//        darkButton.imageView?.contentMode = .ScaleAspectFit
+//        lightButton.imageView?.contentMode = .ScaleAspectFit
+//        blueButton.imageView?.contentMode = .ScaleAspectFit
+//        warmButton.imageView?.contentMode = .ScaleAspectFit
+//        coldButton.imageView?.contentMode = .ScaleAspectFit
     }
 
     // MARK: Share
@@ -115,8 +151,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let bottomConstraint = secondaryMenu.bottomAnchor.constraintEqualToAnchor(bottomMenu.topAnchor)
         let leftConstraint = secondaryMenu.leftAnchor.constraintEqualToAnchor(view.leftAnchor)
         let rightConstraint = secondaryMenu.rightAnchor.constraintEqualToAnchor(view.rightAnchor)
-        
-        let heightConstraint = secondaryMenu.heightAnchor.constraintEqualToConstant(44)
+
+        let heightConstraint = secondaryMenu.heightAnchor.constraintEqualToConstant(88)
         
         NSLayoutConstraint.activateConstraints([bottomConstraint, leftConstraint, rightConstraint, heightConstraint])
         
@@ -142,7 +178,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     //Secondary menu filter actions
     @IBAction func LightFilter(sender: UIButton) {
         if sender.selected == true {
-            filterOnCheck()
+            filterOff()
             toggleFilterButtons()
             return
         }
@@ -155,7 +191,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     @IBAction func DarkFilter(sender: UIButton) {
         if sender.selected == true {
-            filterOnCheck()
+            filterOff()
             toggleFilterButtons()
             return
         }
@@ -168,7 +204,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @IBAction func BlueFilter(sender: UIButton) {
         if sender.selected == true {
-            filterOnCheck()
+            filterOff()
             toggleFilterButtons()
             return
         }
@@ -181,7 +217,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @IBAction func WarmFilter(sender: UIButton) {
         if sender.selected == true {
-            filterOnCheck()
+            filterOff()
             toggleFilterButtons()
             return
         }
@@ -194,7 +230,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @IBAction func ColdFilter(sender: UIButton) {
         if sender.selected == true {
-            filterOnCheck()
+            filterOff()
             toggleFilterButtons()
             return
         }
@@ -224,15 +260,55 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
+    func filterOff() {
+        if originalImage != nil {
+            imageView.image = originalImage
+            
+            imageTransition(filteredImage!)
+            originalImage = nil
+            filteredImage = nil
+        }
+    }
+    
     func filterHelper(filter: String) {
         originalImage = imageView.image
         let rgbaImage = RGBAImage(image: originalImage!)
+        
+        var imageToTransition = originalImage
+        if filteredImage != nil {
+            imageToTransition = filteredImage
+        }
         
         //Process & swap original image for filtered image
         filteredImage = filterPresets[filter]!(rgbaImage!).toUIImage()
         imageView.image = filteredImage
         
         compareButton.enabled = true
+        
+        imageTransition(imageToTransition!)
+    }
+    
+    func imageTransition(original: UIImage) {
+        let originalImageView = UIImageView(image: original)
+        self.view.addSubview(originalImageView)
+        
+        originalImageView.contentMode = .ScaleAspectFit
+        originalImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        let bottomConstraint = originalImageView.bottomAnchor.constraintEqualToAnchor(imageView.bottomAnchor)
+        let leftConstraint = originalImageView.leftAnchor.constraintEqualToAnchor(imageView.leftAnchor)
+        let rightConstraint = originalImageView.rightAnchor.constraintEqualToAnchor(imageView.rightAnchor)
+        let topConstraint = originalImageView.topAnchor.constraintEqualToAnchor(imageView.topAnchor)
+
+        NSLayoutConstraint.activateConstraints([bottomConstraint, leftConstraint, rightConstraint, topConstraint])
+        
+        view.layoutIfNeeded()
+        
+        originalImageView.alpha = 1
+        UIView.animateWithDuration(1) {
+            originalImageView.alpha = 0
+        }
     }
     
     func restoreHelper() {

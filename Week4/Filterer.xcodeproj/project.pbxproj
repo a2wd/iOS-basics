@@ -45,6 +45,7 @@
 		7617AD471BFBD6CB000A81FA /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7617AD461BFBD6CB000A81FA /* Settings.bundle */; };
 		7617AD4A1BFBD8E4000A81FA /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7617AD491BFBD8E4000A81FA /* Filters.swift */; };
 		7617AD4D1BFBDB57000A81FA /* sea.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 7617AD4C1BFBDB57000A81FA /* sea.jpeg */; };
+		76DF5BD41C02670100673609 /* filtericon.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DF5BD31C02670100673609 /* filtericon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +89,7 @@
 		7617AD461BFBD6CB000A81FA /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		7617AD491BFBD8E4000A81FA /* Filters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		7617AD4C1BFBDB57000A81FA /* sea.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sea.jpeg; sourceTree = "<group>"; };
+		76DF5BD31C02670100673609 /* filtericon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = filtericon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -190,6 +192,7 @@
 		7617AD4B1BFBDB4B000A81FA /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				76DF5BD31C02670100673609 /* filtericon.png */,
 				7617AD4C1BFBDB57000A81FA /* sea.jpeg */,
 			);
 			name = Images;
@@ -271,6 +274,7 @@
 				7617AD401BFBD0FB000A81FA /* xhdpi.png in Resources */,
 				7617AD3C1BFBD0FB000A81FA /* iTunesArtwork in Resources */,
 				7617AD4D1BFBDB57000A81FA /* sea.jpeg in Resources */,
+				76DF5BD41C02670100673609 /* filtericon.png in Resources */,
 				4DC1999F1BB201E100AA75E7 /* Assets.xcassets in Resources */,
 				7617AD411BFBD0FB000A81FA /* xxhdpi.png in Resources */,
 				7617AD2C1BFBD0FB000A81FA /* GooglePlayStore.png in Resources */,
