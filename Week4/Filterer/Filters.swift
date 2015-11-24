@@ -58,30 +58,30 @@ class filters {
 //A dictionary of filter presets
 let filterPresets = [
     
-    "lightBW": { (image: RGBAImage) -> RGBAImage in
-        return filters.brightness(filters.greyscale(image), diff: 0.5)
+    "lightBW": { (image: RGBAImage, ratio: Double) -> RGBAImage in
+        return filters.brightness(filters.greyscale(image), diff: (0.5 * ratio))
     },
     
-    "darkBW": { (image: RGBAImage) -> RGBAImage in
-        return filters.brightness(filters.greyscale(image), diff: -0.5)
+    "darkBW": { (image: RGBAImage, ratio: Double) -> RGBAImage in
+        return filters.brightness(filters.greyscale(image), diff: (-0.5 * ratio))
     },
     
-    "onlyBlue": { (image: RGBAImage) -> RGBAImage in
-        return filters.redChannel(filters.greenChannel(image, adjustment: -1), adjustment: -1)
+    "onlyBlue": { (image: RGBAImage, ratio: Double) -> RGBAImage in
+        return filters.redChannel(filters.greenChannel(image, adjustment: (ratio * -1)), adjustment: (-1 * ratio))
     },
     
-    "warmer": { (image: RGBAImage) -> RGBAImage in
-        var manipulatedImage = filters.greenChannel(image, adjustment: -0.2)
-        manipulatedImage = filters.blueChannel(manipulatedImage, adjustment: -0.5)
-        manipulatedImage = filters.redChannel(manipulatedImage, adjustment: 0.5)
+    "warmer": { (image: RGBAImage, ratio: Double) -> RGBAImage in
+        var manipulatedImage = filters.greenChannel(image, adjustment: (ratio * -0.2))
+        manipulatedImage = filters.blueChannel(manipulatedImage, adjustment: (ratio * -0.5))
+        manipulatedImage = filters.redChannel(manipulatedImage, adjustment: (ratio * 0.5))
         
         return manipulatedImage
     },
     
-    "colder": { (image: RGBAImage) -> RGBAImage in
-        var manipulatedImage = filters.greenChannel(image, adjustment: 0.1)
-        manipulatedImage = filters.blueChannel(manipulatedImage, adjustment: 0.5)
-        manipulatedImage = filters.redChannel(manipulatedImage, adjustment: -0.5)
+    "colder": { (image: RGBAImage, ratio: Double) -> RGBAImage in
+        var manipulatedImage = filters.greenChannel(image, adjustment: (ratio * 0.1))
+        manipulatedImage = filters.blueChannel(manipulatedImage, adjustment: (ratio * 0.5))
+        manipulatedImage = filters.redChannel(manipulatedImage, adjustment: (ratio * -0.5))
         
         return manipulatedImage
     }
@@ -95,9 +95,9 @@ class ImageProcess {
         self.image = image
     }
     
-    func applyFilters(filterList: [String]) -> RGBAImage {
+    func applyFilters(filterList: [String], ratio: Double) -> RGBAImage {
         for f in filterList {
-            image = filterPresets[f]!(image)
+            image = filterPresets[f]!(image, ratio)
         }
         return image
     }

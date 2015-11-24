@@ -46,6 +46,7 @@
 		7617AD4A1BFBD8E4000A81FA /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7617AD491BFBD8E4000A81FA /* Filters.swift */; };
 		7617AD4D1BFBDB57000A81FA /* sea.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 7617AD4C1BFBDB57000A81FA /* sea.jpeg */; };
 		76DF5BD41C02670100673609 /* filtericon.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DF5BD31C02670100673609 /* filtericon.png */; };
+		76DF5BD61C026E6600673609 /* deniedicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 76DF5BD51C026E6600673609 /* deniedicon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +91,7 @@
 		7617AD491BFBD8E4000A81FA /* Filters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		7617AD4C1BFBDB57000A81FA /* sea.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sea.jpeg; sourceTree = "<group>"; };
 		76DF5BD31C02670100673609 /* filtericon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = filtericon.png; sourceTree = "<group>"; };
+		76DF5BD51C026E6600673609 /* deniedicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = deniedicon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				76DF5BD31C02670100673609 /* filtericon.png */,
+				76DF5BD51C026E6600673609 /* deniedicon.png */,
 				7617AD4C1BFBDB57000A81FA /* sea.jpeg */,
 			);
 			name = Images;
@@ -259,6 +262,7 @@
 				7617AD471BFBD6CB000A81FA /* Settings.bundle in Resources */,
 				7617AD341BFBD0FB000A81FA /* Icon-Small-40.png in Resources */,
 				7617AD3B1BFBD0FB000A81FA /* Icon@2x.png in Resources */,
+				76DF5BD61C026E6600673609 /* deniedicon.png in Resources */,
 				7617AD351BFBD0FB000A81FA /* Icon-Small-40@2x.png in Resources */,
 				7617AD3E1BFBD0FB000A81FA /* ldpi.png in Resources */,
 				7617AD3A1BFBD0FB000A81FA /* Icon.png in Resources */,

@@ -13,8 +13,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var filteredImage: UIImage?
     var originalImage: UIImage?
     
+    var currentFilter = ""
+    
     @IBOutlet var imageView: UIImageView!
     
+    @IBOutlet var editMenu: UIView!
+    @IBOutlet var editSlider: UISlider!
+    @IBOutlet var editButton: UIButton!
     @IBOutlet var darkButton: UIButton!
     @IBOutlet var lightButton: UIButton!
     @IBOutlet var compareButton: UIButton!
@@ -31,6 +36,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         super.viewDidLoad()
         secondaryMenu.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8)
         secondaryMenu.translatesAutoresizingMaskIntoConstraints = false
+        editMenu.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.8)
+        editMenu.translatesAutoresizingMaskIntoConstraints = false
         
         originalLabel.hidden = true
         
@@ -41,41 +48,31 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         imageTap.addTarget(self, action: "imageToggle:")
         imageView.addGestureRecognizer(imageTap)
         
-//        //Add filtericon to filterbuttons
-//        let filterIcon = RGBAImage(image: UIImage(named:"filtericon")!)
-//        let darkIcon = filterPresets["darkBW"]!(filterIcon!).toUIImage()
-//        let lightIcon = filterPresets["lightBW"]!(filterIcon!).toUIImage()
-//        let blueIcon = filterPresets["onlyBlue"]!(filterIcon!).toUIImage()
-//        let warmIcon = filterPresets["warmer"]!(filterIcon!).toUIImage()
-//        let coldIcon = filterPresets["colder"]!(filterIcon!).toUIImage()
-//        
-//        darkButton.setImage(darkIcon, forState: .Normal)
-//        darkButton.setImage(darkIcon, forState: .Selected)
-//        lightButton.setImage(lightIcon, forState: .Normal)
-//        lightButton.setImage(lightIcon, forState: .Selected)
-//        blueButton.setImage(blueIcon, forState: .Normal)
-//        blueButton.setImage(blueIcon, forState: .Selected)
-//        warmButton.setImage(warmIcon, forState: .Normal)
-//        warmButton.setImage(warmIcon, forState: .Selected)
-//        coldButton.setImage(coldIcon, forState: .Normal)
-//        coldButton.setImage(coldIcon, forState: .Selected)
-//        
-//        darkButton.contentHorizontalAlignment = .Fill
-//        darkButton.contentVerticalAlignment = .Fill
-//        lightButton.contentHorizontalAlignment = .Fill
-//        lightButton.contentVerticalAlignment = .Fill
-//        blueButton.contentHorizontalAlignment = .Fill
-//        blueButton.contentVerticalAlignment = .Fill
-//        warmButton.contentHorizontalAlignment = .Fill
-//        warmButton.contentVerticalAlignment = .Fill
-//        coldButton.contentHorizontalAlignment = .Fill
-//        coldButton.contentVerticalAlignment = .Fill
-//        
-//        darkButton.imageView?.contentMode = .ScaleAspectFit
-//        lightButton.imageView?.contentMode = .ScaleAspectFit
-//        blueButton.imageView?.contentMode = .ScaleAspectFit
-//        warmButton.imageView?.contentMode = .ScaleAspectFit
-//        coldButton.imageView?.contentMode = .ScaleAspectFit
+        //Add filtericon to filterbuttons
+        let darkIcon  = filterPresets["darkBW"]!  (RGBAImage(image: UIImage(named:"filtericon")!)!, 1).toUIImage()
+        let lightIcon = filterPresets["lightBW"]! (RGBAImage(image: UIImage(named:"filtericon")!)!, 1).toUIImage()
+        let blueIcon  = filterPresets["onlyBlue"]!(RGBAImage(image: UIImage(named:"filtericon")!)!, 1).toUIImage()
+        let warmIcon  = filterPresets["warmer"]!  (RGBAImage(image: UIImage(named:"filtericon")!)!, 1).toUIImage()
+        let coldIcon  = filterPresets["colder"]!  (RGBAImage(image: UIImage(named:"filtericon")!)!, 1).toUIImage()
+        let selectedIcon = UIImage(named: "deniedicon")
+        
+        darkButton.setImage(darkIcon, forState: .Normal)
+        lightButton.setImage(lightIcon, forState: .Normal)
+        blueButton.setImage(blueIcon, forState: .Normal)
+        warmButton.setImage(warmIcon, forState: .Normal)
+        coldButton.setImage(coldIcon, forState: .Normal)
+        
+        darkButton.setImage(selectedIcon, forState: .Selected)
+        lightButton.setImage(selectedIcon, forState: .Selected)
+        blueButton.setImage(selectedIcon, forState: .Selected)
+        warmButton.setImage(selectedIcon, forState: .Selected)
+        coldButton.setImage(selectedIcon, forState: .Selected)
+        
+        darkButton.imageView?.contentMode = .ScaleAspectFit
+        lightButton.imageView?.contentMode = .ScaleAspectFit
+        blueButton.imageView?.contentMode = .ScaleAspectFit
+        warmButton.imageView?.contentMode = .ScaleAspectFit
+        coldButton.imageView?.contentMode = .ScaleAspectFit
     }
 
     // MARK: Share
@@ -124,8 +121,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             imageView.image = image
             originalImage = nil
             filteredImage = nil
-            hideSecondaryMenu()
+            editButton.selected = false
+            editButton.enabled = false
+            secondaryMenu.removeFromSuperview()
+            editMenu.removeFromSuperview()
             filterButton.selected = false
+            filterButton.enabled = true
             toggleFilterButtons()
         }
     }
@@ -165,6 +166,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
     @IBOutlet var originalLabel: UILabel!
+    
+    
     func hideSecondaryMenu() {
         UIView.animateWithDuration(0.4, animations: {
             self.secondaryMenu.alpha = 0
@@ -186,7 +189,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         sender.selected = true
         
         filterOnCheck()
-        filterHelper("lightBW")
+        currentFilter = "lightBW"
+        filterHelper(currentFilter, ratio: 0.5)
     }
 
     @IBAction func DarkFilter(sender: UIButton) {
@@ -199,7 +203,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         sender.selected = true
         
         filterOnCheck()
-        filterHelper("darkBW")
+        currentFilter = "darkBW"
+        filterHelper(currentFilter, ratio: 0.5)
     }
     
     @IBAction func BlueFilter(sender: UIButton) {
@@ -212,7 +217,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         sender.selected = true
         
         filterOnCheck()
-        filterHelper("onlyBlue")
+        currentFilter = "onlyBlue"
+        filterHelper(currentFilter, ratio: 0.5)
     }
     
     @IBAction func WarmFilter(sender: UIButton) {
@@ -225,7 +231,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         sender.selected = true
         
         filterOnCheck()
-        filterHelper("warmer")
+        currentFilter = "warmer"
+        filterHelper(currentFilter, ratio: 0.5)
     }
     
     @IBAction func ColdFilter(sender: UIButton) {
@@ -238,11 +245,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         sender.selected = true
         
         filterOnCheck()
-        filterHelper("colder")
+        currentFilter = "colder"
+        filterHelper(currentFilter, ratio: 0.5)
     }
     
     //Button state manager
     func toggleFilterButtons() {
+        editSlider.value = 0.5
         lightButton.selected = false
         darkButton.selected = false
         blueButton.selected = false
@@ -250,6 +259,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         coldButton.selected = false
         compareButton.enabled = false
         compareButton.selected = false
+        editButton.selected = false
+        editButton.enabled = false
     }
     
     //Filter helpers
@@ -258,9 +269,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             imageView.image = originalImage
             originalImage = nil
         }
+        editButton.enabled = true
     }
     
     func filterOff() {
+        currentFilter = ""
+        
         if originalImage != nil {
             imageView.image = originalImage
             
@@ -270,7 +284,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
     }
     
-    func filterHelper(filter: String) {
+    func filterHelper(filter: String, ratio: Double) {
         originalImage = imageView.image
         let rgbaImage = RGBAImage(image: originalImage!)
         
@@ -280,7 +294,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         
         //Process & swap original image for filtered image
-        filteredImage = filterPresets[filter]!(rgbaImage!).toUIImage()
+        filteredImage = filterPresets[filter]!(rgbaImage!, ratio).toUIImage()
         imageView.image = filteredImage
         
         compareButton.enabled = true
@@ -347,6 +361,56 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             imageView.image = filteredImage
             originalLabel.hidden = true
         }
+    }
+    
+    //Edit Button
+    @IBAction func editButton(sender: UIButton) {
+        if sender.selected {
+            //Show edit slide
+            HideEditSlider()
+            sender.selected = false
+        }
+        else {
+            //hide edit slide
+            ShowEditSlider()
+            sender.selected = true
+        }
+    }
+    
+    @IBAction func editAction(sender: UISlider) {
+        imageView.image = originalImage
+        originalImage = nil
+        filterHelper(currentFilter, ratio: Double(sender.value))
+    }
+    
+    func ShowEditSlider() {
+        //Clean up secondary menu
+        secondaryMenu.removeFromSuperview()
+        view.addSubview(editMenu)
+        filterButton.selected = false
+        filterButton.enabled = false
+
+        let bottomConstraint = editMenu.bottomAnchor.constraintEqualToAnchor(bottomMenu.topAnchor)
+        let leftConstraint = editMenu.leftAnchor.constraintEqualToAnchor(view.leftAnchor)
+        let rightConstraint = editMenu.rightAnchor.constraintEqualToAnchor(view.rightAnchor)
+
+        let heightConstraint = editMenu.heightAnchor.constraintEqualToConstant(44)
+
+        NSLayoutConstraint.activateConstraints([bottomConstraint, leftConstraint, rightConstraint, heightConstraint])
+
+        view.layoutIfNeeded()
+
+        self.editMenu.alpha = 0
+        UIView.animateWithDuration(0.4) {
+            self.editMenu.alpha = 1.0
+        }
+    }
+    
+    func HideEditSlider() {
+        self.editMenu.removeFromSuperview()
+        showSecondaryMenu()
+        filterButton.selected = true
+        filterButton.enabled = true
     }
 }
 
